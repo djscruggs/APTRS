@@ -22,11 +22,12 @@ services:
     image: "postgres:latest"
     restart: always
     volumes:
-      - $USERPROFILE/APTRS/postgresql_data:/var/lib/postgresql
+      - ${HOME}/APTRS/postgresql_data:/var/lib/postgresql
     environment:
       - POSTGRES_USER=aptrsdbuser
       - POSTGRES_PASSWORD=aptrsdbpassword
       - POSTGRES_DB=aptrs
+      - POSTGRES_PORT=5432
     ports:
      - "5432:5432"
     networks:
@@ -56,6 +57,8 @@ services:
       - POSTGRES_USER=aptrsdbuser
       - POSTGRES_PASSWORD=aptrsdbpassword
       - POSTGRES_DB=aptrs
+      - POSTGRES_PORT=5432
+      - LOG_FILE_LOCATION=/home/aptrs/APTRS/logs/aptrs.log
     depends_on:
       - postgres
       - cache
@@ -63,8 +66,9 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - $USERPROFILE/aptrs:/home/aptrs/.aptrs
+      - ${HOME}/aptrs:/home/aptrs/.aptrs
       - static_volume:/home/aptrs/APTRS/static/
+      - ${HOME}/aptrs/aptrs_logs:/home/aptrs/APTRS/logs
     ports:
      - "8000:8000"
     networks:
